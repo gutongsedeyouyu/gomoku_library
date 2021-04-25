@@ -1,0 +1,79 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        {% if not can_edit %}<meta http-equiv="refresh" content="120">{% end %}
+        <link href="/s/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/s/css/style.css" rel="stylesheet">
+        <title>中国连珠网棋谱库</title>
+    </head>
+    <body>
+        <div id="pass" class="alert alert-info">PASS</div>
+        <div class="container text-center">
+            <div class="row">
+                <div class="table-responsive col-xs-12 col-md-8 col-md-offset-2">
+                    <table class="table" style="border:none;">
+                        <tr>
+                            <td style="border:none;">
+                                <div id="board"></div>
+                            </td>
+                            <td style="border:none;">
+                                <label for="title">赛轮</label>
+                                <input id="title" type="text" size="30">
+                                <br>
+                                <label for="blackPlayerName">黑棋</label>
+                                <input id="blackPlayerName" type="text" size="30">
+                                <br>
+                                <label for="whitePlayerName">白棋</label>
+                                <input id="whitePlayerName" type="text" size="30">
+                                <br><br>
+                                <input id="label" type="text" size="34" onchange="this.value = (this.value.length > 0) ? this.value.charAt(0) : '';">
+                                <br>
+                                <textarea id="comment" cols="35" rows="10"}></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <a href="javascript:;" onclick="__gomoku__.goToBeforeFirstMove();"><img src="/s/img/first_move.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.goToPreviousFork();"><img src="/s/img/previous_fork.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.goToPreviousMove();"><img src="/s/img/previous_move.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.goToNextMove();"><img src="/s/img/next_move.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.goToNextFork();"><img src="/s/img/next_fork.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.goToLastMove();"><img src="/s/img/last_move.png"></a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="javascript:;" onclick="__gomoku__.revert();"><img src="/s/img/revert.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.reflectUpDown();"><img src="/s/img/up_down.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.reflectLeftRight();"><img src="/s/img/left_right.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.rotateClockwise();"><img src="/s/img/clockwise.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.rotateCounterclockwise();"><img src="/s/img/counterclockwise.png"></a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="javascript:;" onclick="__gomoku__.searchManual();"><img src="/s/img/search.png"></a>
+                {% if can_edit %}
+                <a href="javascript:;" onclick="__gomoku__.playPassMove();"><img src="/s/img/pass.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.deleteCurrentMove();"><img src="/s/img/delete.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.saveLibrary();"><img src="/s/img/save.png"></a>
+                {% end %}
+            </div>
+            <br>
+        </div>
+        <script type="text/javascript" src="/s/js/request.js"></script>
+        <script type="text/javascript" src="/s/js/gomoku.js"></script>
+        <script type="text/javascript">
+            __gomoku__ = new Gomoku({% if can_edit %} CHARACTER.EDITOR {% else %} CHARACTER.VISITOR {% end %}, false, false, 0);
+            {% if not library %}
+            __gomoku__.showFreshNew();
+            {% else %}
+            __gomoku__.loadLibrary('{{ library.id }}', '{{ library.title }}', '{{ library.blackPlayerName }}', '{{ library.whitePlayerName }}', {% raw library.manual %});
+            {% end %}
+            {% if can_edit %}
+            if (window.opener != null && window.opener.location.pathname == "/library/list") {
+                window.onunload = function() {
+                    window.opener.location.reload();
+                }
+            }
+            {% end %}
+        </script>
+    </body>
+</html>

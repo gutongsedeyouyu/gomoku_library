@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link href="/s/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/s/css/style.css" rel="stylesheet">
+        <title>搜索</title>
+    </head>
+    <body>
+        <div id="pass" class="alert alert-info">PASS</div>
+        <div class="container">
+            <br>
+            <div class="row">
+                <div class="text-center">
+                    <input id="title" type="textfield" size="20">
+                    <input id="searchText" type="button" value="搜文字" class="btn btn-primary" onclick="__gomoku__.searchText();">
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-center text-warning">
+                    <span><br>--------------------&nbsp;&nbsp;或者&nbsp;&nbsp;--------------------<br></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <td colspan="3" style="border:none;">
+                                <div id="board" align="center"></div>
+                                <div style="display:none;">
+                                    <input id="label" type="textfield" maxlength="1" class="label" onchange="this.value = (this.value.length > 0) ? this.value.charAt(0) : '';">
+                                    <textarea id="comment" class="comment"></textarea>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row text-center">
+                <a href="javascript:;" onclick="__gomoku__.goToBeforeFirstMove();"><img src="/s/img/first_move.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.goToPreviousFork();"><img src="/s/img/previous_fork.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.goToPreviousMove();"><img src="/s/img/previous_move.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.goToNextMove();"><img src="/s/img/next_move.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.goToNextFork();"><img src="/s/img/next_fork.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.goToLastMove();"><img src="/s/img/last_move.png"></a>
+                <a href="javascript:;" onclick="__gomoku__.playPassMove();"><img src="/s/img/pass.png"></a>
+                &nbsp;&nbsp;
+                <input id="searchManual" type="button" value="搜棋型" class="btn btn-primary" onclick="__gomoku__.searchManual();">
+            </div>
+            <br>
+        </div>
+        <script type="text/javascript" src="/s/js/request.js"></script>
+        <script type="text/javascript" src="/s/js/gomoku.js"></script>
+        <script type="text/javascript">
+            __gomoku__ = new Gomoku(CHARACTER.EDITOR, false, false, 0);
+            __gomoku__.showFreshNew();
+        </script>
+    </body>
+</html>

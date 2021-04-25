@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link href="/s/css/bootstrap.min.css" rel="stylesheet">
+        <title>登录</title>
+    </head>
+    <body>
+        <div class="container">
+            <br>
+            <div class="row text-center">
+                <label for="userName">账号</label>
+                <input id="userName" type="text"/>
+            </div>
+            <br>
+            <div class="row text-center">
+                <label for="password">密码</label>
+                <input id="password" type="password">
+            </div>
+            <br>
+            <div class="row text-center">
+                <a href="javascript:;" class="btn btn-primary" onclick="login()">登录</a>
+            </div>
+        </div>
+        <script type="text/javascript" src="/s/js/request.js"></script>
+        <script type="text/javascript">
+            function login() {
+                var userName = document.getElementById("userName").value;
+                var password = document.getElementById("password").value;
+                if (userName.length == 0 || password.length == 0) {
+                    alert("请输入用户名和密码");
+                    return;
+                }
+                var apiRequest = new ApiRequest("/api/account/login");
+                apiRequest.send({
+                                    "userName":userName,
+                                    "password":password
+                                },
+                                function(result) {
+                                    document.cookie = "sessionId=" + result["sessionId"] + ";path=/";
+                                    window.location = "/library/list";
+                                },
+                                function(status, message) {
+                                    alert(message);
+                                }
+                );
+            }
+        </script>
+    </body>
+</html>

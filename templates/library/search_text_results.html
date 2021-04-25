@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link href="/s/css/bootstrap.min.css" rel="stylesheet">
+        <title>中国连珠网棋谱库</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row text-center">
+                <h3>搜索“{{ keyword }}”的结果</h3>
+            </div>
+        </div>
+        <div class="container table-responsive">
+            <table class="col-xs-12 table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th class="col-xs-5">赛轮</th>
+                        <th class="col-xs-3">黑棋</th>
+                        <th class="col-xs-3">白棋</th>
+                        <th class="col-xs-1">棋谱</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for library in libraries %}
+                    <tr>
+                        <td>
+                            {{ library.title if len(library.title) > 0 else '无' }}
+                        </td>
+                        <td>
+                            {{ library.blackPlayerName }}
+                        </td>
+                        <td>
+                            {{ library.whitePlayerName }}
+                        </td>
+                        <td>
+                            <a href="/library/viewOrEdit?id={{ library.id }}" target="_blank" class="btn btn-link">查看</a>
+                        </td>
+                    </tr>
+                    {% end %}
+                </tbody>
+            </table>
+        </div>
+        <div class="container text-center">
+            <ul class="pagination">
+                {% set threshold = 5 %}
+                {% if page_index > threshold %}
+                <li><a href="javascript:;" onclick="jumpTo(0)">1</a></li>
+                <li class="disabled"><a href="javascript:;">...</a></li>
+                {% end %}
+
+                {% for i in range(max(page_index - threshold, 0), min(page_index + threshold + 1, page_count)) %}
+                    {% if i != page_index %}
+                    <li><a href="javascript:;" onclick="jumpTo({{ i }})">{{ i + 1 }}</a></li>
+                    {% else %}
+                    <li class="active"><a href="javascript:;" onclick="jumpTo({{ i }})">{{ i + 1 }}</a></li>
+                    {% end %}
+                {% end %}
+
+                {% if page_index < page_count - 1 - threshold %}
+                <li class="disabled"><a href="javascript:;">...</a></li>
+                <li><a href="javascript:;" onclick="jumpTo({{ page_count - 1 }})">{{ page_count }}</a></li>
+                {% end %}
+            </ul>
+        </div>
+        <form id="searchForm" action="/library/searchText" method="post" target="_self">
+            <input id="keyword" name="keyword" type="hidden" value=""/>
+            <input id="pageIndex" name="pageIndex" type="hidden" value="0"/>
+        </form>
+        <script type="text/javascript">
+            document.getElementById("keyword").value = "{{ keyword }}";
+
+            function jumpTo(pageIndex) {
+                document.getElementById("pageIndex").value = pageIndex;
+                document.getElementById("searchForm").submit();
+            }
+        </script>
+    </body>
+</html>

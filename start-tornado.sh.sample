@@ -1,0 +1,5 @@
+#!/bin/sh
+cd '/path/to/project'
+mkdir -p ../logs
+nohup python3 -m main --log_file_prefix=../logs/tornado.log --log_file_num_backups=10 > ../logs/start-tornado.log 2>&1 &
+echo $! > ../logs/pid.log

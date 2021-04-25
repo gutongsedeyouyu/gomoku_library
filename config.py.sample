@@ -1,0 +1,18 @@
+import tornado.options
+
+tornado.options.define('port', default=8000, type=int)
+tornado.options.define('debug', default=False, type=bool)
+tornado.options.define('num_processes', default=1, type=int)
+
+tornado.options.define('login_url', default='/account/login', type=str)
+tornado.options.define('session_expire_after', default=30 * 24 * 60 * 60, type=int)
+
+tornado.options.define('mysql_host', default='127.0.0.1', type=str)
+tornado.options.define('mysql_port', default=3306, type=int)
+tornado.options.define('mysql_database', default='database', type=str)
+tornado.options.define('mysql_user', default='user', type=str)
+tornado.options.define('mysql_password', default='password', type=str)
+
+
+def config():
+    tornado.options.parse_command_line()
