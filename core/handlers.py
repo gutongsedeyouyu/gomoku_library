@@ -107,7 +107,8 @@ class ApiHandler(BaseHandler):
         return self.get_str_argument('sessionId')
 
     def on_login_required(self):
-        raise tornado.web.HTTPError(401)
+        self.set_status(401)
+        self.finish('请登录'.encode('utf-8'))
 
     def api_succeeded(self, result=None):
         if result is None:
@@ -116,7 +117,8 @@ class ApiHandler(BaseHandler):
             self.finish(json.dumps(result, separators=(',', ':')).encode('utf-8'))
 
     def api_failed(self, message=''):
-        raise tornado.web.HTTPError(500, message)
+        self.set_status(400)
+        self.finish(message.encode('utf-8'))
 
 
 class InvalidUrlHandler(BaseHandler):

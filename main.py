@@ -24,7 +24,7 @@ def main():
             handlers=handlers,
             template_path=os.path.join(os.path.dirname(__file__), 'templates'),
             debug=options.debug)
-    http_server = tornado.httpserver.HTTPServer(application)
+    http_server = tornado.httpserver.HTTPServer(application, xheaders=True)
     http_server.bind(options.port)
     http_server.start(options.num_processes)
     tornado.ioloop.IOLoop.current().start()

@@ -1,7 +1,8 @@
 from datetime import datetime
 import json
+import re
 
-from sqlalchemy import Column, String, Text, or_, asc, desc
+from sqlalchemy import Column, String, Text, or_, desc
 
 from core.models import BaseModel, BaseModelMixin, paginate
 
@@ -146,6 +147,9 @@ class Library(BaseModel, BaseModelMixin):
         return True
 
 
+_date_pattern = re.compile(r'.*?([\d]+)年([\d]+)月.*')
+
+
 class HotKeyword(BaseModel, BaseModelMixin):
     keyword = Column('keyword', String(40))
 
@@ -176,5 +180,9 @@ class HotKeyword(BaseModel, BaseModelMixin):
 
     @staticmethod
     def list_all(db):
-        hot_keywords = db.query(HotKeyword).order_by(asc(HotKeyword.keyword)).all()
+        def sort_key(hot_keyword):
+            match = _date_pattern.match(hot_keyword.keyword)
+            return (-int(match[1]), -int(match[2])) if match else (0, 0)
+        hot_keywords = db.query(HotKeyword).all()
+        hot_keywords = sorted(hot_keywords, key=sort_key)
         return hot_keywords

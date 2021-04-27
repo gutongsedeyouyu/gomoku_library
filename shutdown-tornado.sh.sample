@@ -1,0 +1,6 @@
+#!/bin/sh
+PROJECT_ROOT='/path/to/project'
+
+cd $PROJECT_ROOT
+PID=`cat ../logs/pid.log`
+kill $PID

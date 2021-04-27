@@ -25,6 +25,19 @@
         <div class="container table-responsive">
             <table class="col-xs-12 table-striped table-hover">
                 <tbody>
+                    {% if can_edit %}
+                    <tr>
+                        <td class="col-xs-2">
+                            &nbsp;
+                        </td>
+                        <td class="col-xs-8">
+                            <a href="/library/list" target="_blank">查看全部棋谱</a>
+                        </td>
+                        <td class="col-xs-2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    {% end %}
                     {% for hotKeyword in hotKeywords %}
                     <tr>
                         <td class="col-xs-2">
@@ -33,19 +46,15 @@
                         <td class="col-xs-8">
                             <a href="#" onclick="searchText('{{ hotKeyword.keyword.split('/')[0] }}');">{{ hotKeyword.keyword }}</a>
                         </td>
-                        {% if not can_edit %}
                         <td class="col-xs-2">
                             <a href="#" onclick="searchText('{{ hotKeyword.keyword.split('/')[0] }}');" class="btn btn-link">赛况</a>
-                        </td>
-                        {% else %}
-                        <td class="col-xs-2">
-                            <a href="#" onclick="searchText('{{ hotKeyword.keyword.split('/')[0] }}');" class="btn btn-link">赛况</a>
+                            {% if can_edit %}
                             <a href="#" onclick="deleteHotKeyword('{{ hotKeyword.id }}');" class="btn btn-link">删除</a>
+                            {% end %}
                         </td>
-                        {% end %}
                     </tr>
                     {% end %}
-                    {% if can_edit %}
+                    {% if not can_edit %}
                     <tr>
                         <td class="col-xs-2">
                             &nbsp;

@@ -8,6 +8,10 @@ http {
         server_name localhost;
         charset utf-8;
 
+        location /s/ {
+            alias /path/to/static/;
+        }
+
         location / {
             proxy_pass_header Server;
             proxy_set_header Host $http_host;
@@ -15,10 +19,6 @@ http {
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Scheme $scheme;
             proxy_pass http://tornado;
-        }
-
-        location /s/ {
-            alias /path/to/static/;
         }
     }
 }
