@@ -12,36 +12,36 @@ class Library(BaseModel, BaseModelMixin):
     blackPlayerName = Column('black_player_name', String(40))
     whitePlayerName = Column('white_player_name', String(40))
     manual = Column('manual', Text())
-    pattern1 = Column('pattern_1', String(256), index=True)
-    pattern2 = Column('pattern_2', String(256), index=True)
-    pattern3 = Column('pattern_3', String(256), index=True)
-    pattern4 = Column('pattern_4', String(256), index=True)
-    pattern5 = Column('pattern_5', String(256), index=True)
-    pattern6 = Column('pattern_6', String(256), index=True)
-    pattern7 = Column('pattern_7', String(256), index=True)
-    pattern8 = Column('pattern_8', String(256), index=True)
-    pattern9 = Column('pattern_9', String(256), index=True)
-    pattern10 = Column('pattern_10', String(256), index=True)
-    pattern11 = Column('pattern_11', String(256), index=True)
-    pattern12 = Column('pattern_12', String(256), index=True)
-    pattern13 = Column('pattern_13', String(256), index=True)
-    pattern14 = Column('pattern_14', String(256), index=True)
-    pattern15 = Column('pattern_15', String(256), index=True)
-    pattern16 = Column('pattern_16', String(256), index=True)
-    pattern17 = Column('pattern_17', String(256), index=True)
-    pattern18 = Column('pattern_18', String(256), index=True)
-    pattern19 = Column('pattern_19', String(256), index=True)
-    pattern20 = Column('pattern_20', String(256), index=True)
-    pattern21 = Column('pattern_21', String(256), index=True)
-    pattern22 = Column('pattern_22', String(256), index=True)
-    pattern23 = Column('pattern_23', String(256), index=True)
-    pattern24 = Column('pattern_24', String(256), index=True)
-    pattern25 = Column('pattern_25', String(256), index=True)
-    pattern26 = Column('pattern_26', String(256), index=True)
-    pattern27 = Column('pattern_27', String(256), index=True)
-    pattern28 = Column('pattern_28', String(256), index=True)
-    pattern29 = Column('pattern_29', String(256), index=True)
-    pattern30 = Column('pattern_30', String(256), index=True)
+    pattern1 = Column('pattern_1', String(255), index=True)
+    pattern2 = Column('pattern_2', String(255), index=True)
+    pattern3 = Column('pattern_3', String(255), index=True)
+    pattern4 = Column('pattern_4', String(255), index=True)
+    pattern5 = Column('pattern_5', String(255), index=True)
+    pattern6 = Column('pattern_6', String(255), index=True)
+    pattern7 = Column('pattern_7', String(255), index=True)
+    pattern8 = Column('pattern_8', String(255), index=True)
+    pattern9 = Column('pattern_9', String(255), index=True)
+    pattern10 = Column('pattern_10', String(255), index=True)
+    pattern11 = Column('pattern_11', String(255), index=True)
+    pattern12 = Column('pattern_12', String(255), index=True)
+    pattern13 = Column('pattern_13', String(255), index=True)
+    pattern14 = Column('pattern_14', String(255), index=True)
+    pattern15 = Column('pattern_15', String(255), index=True)
+    pattern16 = Column('pattern_16', String(255), index=True)
+    pattern17 = Column('pattern_17', String(255), index=True)
+    pattern18 = Column('pattern_18', String(255), index=True)
+    pattern19 = Column('pattern_19', String(255), index=True)
+    pattern20 = Column('pattern_20', String(255), index=True)
+    pattern21 = Column('pattern_21', String(255), index=True)
+    pattern22 = Column('pattern_22', String(255), index=True)
+    pattern23 = Column('pattern_23', String(255), index=True)
+    pattern24 = Column('pattern_24', String(255), index=True)
+    pattern25 = Column('pattern_25', String(255), index=True)
+    pattern26 = Column('pattern_26', String(255), index=True)
+    pattern27 = Column('pattern_27', String(255), index=True)
+    pattern28 = Column('pattern_28', String(255), index=True)
+    pattern29 = Column('pattern_29', String(255), index=True)
+    pattern30 = Column('pattern_30', String(255), index=True)
 
     @staticmethod
     def add(db, title, black_player_name, white_player_name, manual):
@@ -152,23 +152,26 @@ _date_pattern = re.compile(r'.*?([\d]+)年([\d]+)月.*')
 
 class HotKeyword(BaseModel, BaseModelMixin):
     keyword = Column('keyword', String(40))
+    externalLink = Column('external_link', String(255))
 
     @staticmethod
-    def add(db, keyword):
+    def add(db, keyword, external_link):
         now = datetime.now()
         hot_keyword = HotKeyword()
         hot_keyword.createTime = now
         hot_keyword.updateTime = now
         hot_keyword.keyword = keyword
+        hot_keyword.externalLink = external_link
         db.add(hot_keyword)
         db.commit()
         return hot_keyword
 
     @staticmethod
-    def update(db, hot_keyword_id, keyword):
+    def update(db, hot_keyword_id, keyword, external_link):
         hot_keyword = db.query(HotKeyword).filter(HotKeyword.id == hot_keyword_id).one()
         hot_keyword.updateTime = datetime.now()
         hot_keyword.keyword = keyword
+        hot_keyword.externalLink = external_link
         db.merge(hot_keyword)
         db.commit()
         return hot_keyword

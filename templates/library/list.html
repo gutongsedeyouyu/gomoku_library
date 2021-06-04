@@ -19,7 +19,7 @@
         </div>
         <div class="container text-right">
             <a href="/library/search" target="_blank" class="btn btn-primary btn-sm">搜索</a>
-            {% if session %}
+            {% if can_edit %}
             <a href="/library/viewOrEdit" target="_blank" class="btn btn-primary btn-sm">新建</a>
             {% end %}
         </div>

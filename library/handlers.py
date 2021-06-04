@@ -27,10 +27,16 @@ class LibraryApiSaveHotKeywordHandler(ApiHandler):
     def post(self, *args, **kwargs):
         hot_keyword_id = self.get_str_argument('id', '')
         hot_keyword_keyword = self.get_str_argument('keyword', '')
+        hot_keyword_external_link = self.get_str_argument('externalLink', '')
         if not hot_keyword_id:
-            hot_keyword = HotKeyword.add(self.db, keyword=hot_keyword_keyword)
+            hot_keyword = HotKeyword.add(self.db,
+                                         keyword=hot_keyword_keyword,
+                                         external_link=hot_keyword_external_link)
         else:
-            hot_keyword = HotKeyword.update(self.db, hot_keyword_id=hot_keyword_id, keyword=hot_keyword_keyword)
+            hot_keyword = HotKeyword.update(self.db,
+                                            hot_keyword_id=hot_keyword_id,
+                                            keyword=hot_keyword_keyword,
+                                            external_link=hot_keyword_external_link)
         return self.api_succeeded({'id': str(hot_keyword.id)})
 
 
@@ -55,7 +61,8 @@ class LibraryListHandler(PageHandler):
         page_index = self.get_int_argument('pageIndex')
         libraries, page_index, page_count = Library.list_by_page(self.db, page_index)
         return self.render('library/list.html',
-                           session=session, libraries=libraries, page_index=page_index, page_count=page_count)
+                           session=session, can_edit=session and 'root' in session['permissions'],
+                           libraries=libraries, page_index=page_index, page_count=page_count)
 
 
 class LibrarySearchHandler(PageHandler):
@@ -88,13 +95,13 @@ class LibraryViewOrEditHandler(PageHandler):
         # View/edit a blank library or an existing one.
         if not library_id:
             return self.render('library/view_or_edit.html',
-                               library=None,
-                               can_edit=session and 'root' in session['permissions'])
+                               can_edit=session and 'root' in session['permissions'],
+                               library=None)
         else:
             library = Library.find_by_id(self.db, library_id=library_id)
             return self.render('library/view_or_edit.html',
-                               library=library,
-                               can_edit=session and 'root' in session['permissions'])
+                               can_edit=session and 'root' in session['permissions'],
+                               library=library)
 
 
 class LibraryHotKeywordListHandler(PageHandler):
@@ -102,7 +109,8 @@ class LibraryHotKeywordListHandler(PageHandler):
         session = self.session_data
         hot_keywords = HotKeyword.list_all(self.db)
         return self.render('library/hot_keyword_list.html',
-                           session=session, hotKeywords=hot_keywords, can_edit=session and 'root' in session['permissions'])
+                           session=session, can_edit=session and 'root' in session['permissions'],
+                           hotKeywords=hot_keywords)
 
 
 __page_handlers__ = [

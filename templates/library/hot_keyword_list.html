@@ -4,6 +4,8 @@
         <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <link href="/s/css/bootstrap.min.css" rel="stylesheet">
+        <script src="/s/js/jquery.min.js"></script>
+        <script src="/s/js/bootstrap.min.js"></script>
         <title>那V连珠网棋谱库</title>
     </head>
     <body>
@@ -19,7 +21,7 @@
         </div>
         {% if can_edit %}
         <div class="container text-right">
-                <a href="#" onclick="addHotKeyword();" class="btn btn-primary btn-sm">添加</a>
+            <a href="#" onclick="editHotKeyword('', '', '');" class="btn btn-primary btn-sm">添加</a>
         </div>
         {% end %}
         <div class="container table-responsive">
@@ -45,16 +47,18 @@
                         </td>
                         <td class="col-xs-8">
                             <a href="#" onclick="searchText('{{ hotKeyword.keyword.split('/')[0] }}');">{{ hotKeyword.keyword }}</a>
+                            {% if hotKeyword.externalLink %}
+                            <a href="{{ hotKeyword.externalLink }}" target="_blank" class="btn btn-link">[查看赛况]</a>
+                            {% end %}
                         </td>
                         <td class="col-xs-2">
-                            <a href="#" onclick="searchText('{{ hotKeyword.keyword.split('/')[0] }}');" class="btn btn-link">赛况</a>
                             {% if can_edit %}
+                            <a href="#" onclick="editHotKeyword('{{ hotKeyword.id }}', '{{ hotKeyword.keyword }}', '{{ hotKeyword.externalLink if hotKeyword.externalLink else '' }}');" class="btn btn-link">编辑</a>
                             <a href="#" onclick="deleteHotKeyword('{{ hotKeyword.id }}');" class="btn btn-link">删除</a>
                             {% end %}
                         </td>
                     </tr>
                     {% end %}
-                    {% if not can_edit %}
                     <tr>
                         <td class="col-xs-2">
                             &nbsp;
@@ -66,9 +70,33 @@
                             &nbsp;
                         </td>
                     </tr>
-                    {% end %}
                 </tbody>
             </table>
+        </div>
+        <div id="editHotKeywordDialog" class="modal" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">添加/编辑赛事</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="hotKeywordIdText" type="hidden">
+                        <div class="form-group">
+                            <label for="hotKeywordKeywordText">赛事名称与时间</label>
+                            <input id="hotKeywordKeywordText" type="text" class="form-control" placeholder="赛事名称/YYYY年M月">
+                        </div>
+                        <div class="form-group">
+                            <label for="hotKeywordExternalLinkText">赛况链接</label>
+                            <textarea id="hotKeywordExternalLinkText" class="form-control"}></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="saveHotKeyword();">确定</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <script type="text/javascript" src="/s/js/request.js"></script>
         <script type="text/javascript">
@@ -79,17 +107,21 @@
                     'pageIndex':0
                 });
             }
-            function addHotKeyword() {
-                var keyword = prompt("请输入要添加的热门搜索关键词", "");
-                if (keyword) {
-                    saveHotKeyword(keyword);
-                }
+            function editHotKeyword(id, keyword, externalLink) {
+                $('#hotKeywordIdText').val(id);
+                $('#hotKeywordKeywordText').val(keyword);
+                $('#hotKeywordExternalLinkText').val(externalLink);
+                $('#editHotKeywordDialog').modal();
             }
-            function saveHotKeyword(keyword) {
+            function saveHotKeyword() {
+                id = $('#hotKeywordIdText').val();
+                keyword = $('#hotKeywordKeywordText').val();
+                externalLink = $('#hotKeywordExternalLinkText').val();
                 var apiRequest = new ApiRequest('/api/library/saveHotKeyword');
                 apiRequest.send({
-                        'id':'',
-                        'keyword':keyword
+                        'id':id,
+                        'keyword':keyword,
+                        'externalLink':externalLink
                     },
                     function(result) {
                         window.location.reload();
@@ -106,7 +138,7 @@
                     function(result) {
                         window.location.reload();
                     },
-                    function(result) {
+                    function(status, message) {
                     }
                 );
             }

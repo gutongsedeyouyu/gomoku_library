@@ -41,7 +41,7 @@ FormRequest.prototype.send = function(parameters) {
  *
  * public:
  *     ApiRequest(url)
- *     send(parameters, callback)
+ *     send(parameters, succeeded, failed)
  *
  * private:
  *     __getSessionId()
@@ -72,7 +72,7 @@ ApiRequest.prototype.send = function(parameters, succeeded, failed) {
     xmlHttpRequest.onreadystatechange = function() {
         if (xmlHttpRequest.readyState == 4) {
             if (xmlHttpRequest.status == 200) {
-                succeeded(JSON.parse(xmlHttpRequest.responseText));
+                succeeded(xmlHttpRequest.responseText ? JSON.parse(xmlHttpRequest.responseText) : null);
             }
             if (xmlHttpRequest.status >= 400) {
                 failed(xmlHttpRequest.status, xmlHttpRequest.responseText);
