@@ -46,14 +46,14 @@
                             &nbsp;
                         </td>
                         <td class="col-xs-8">
-                            <a href="#" onclick="searchText('{{ hotKeyword.keyword.split('/')[0] }}');">{{ hotKeyword.keyword }}</a>
+                            <a href="#" onclick="searchText('{{ hotKeyword.keyword.split('/')[0].replace('\'', '\\\'') }}');">{{ hotKeyword.keyword }}</a>
                             {% if hotKeyword.externalLink %}
                             <a href="{{ hotKeyword.externalLink }}" target="_blank" class="btn btn-link">[查看赛况]</a>
                             {% end %}
                         </td>
                         <td class="col-xs-2">
                             {% if can_edit %}
-                            <a href="#" onclick="editHotKeyword('{{ hotKeyword.id }}', '{{ hotKeyword.keyword }}', '{{ hotKeyword.externalLink if hotKeyword.externalLink else '' }}');" class="btn btn-link">编辑</a>
+                            <a href="#" onclick="editHotKeyword('{{ hotKeyword.id }}', '{{ hotKeyword.keyword.replace('\'', '\\\'') }}', '{{ hotKeyword.externalLink if hotKeyword.externalLink else '' }}');" class="btn btn-link">编辑</a>
                             <a href="#" onclick="deleteHotKeyword('{{ hotKeyword.id }}');" class="btn btn-link">删除</a>
                             {% end %}
                         </td>
